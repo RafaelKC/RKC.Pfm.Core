@@ -21,7 +21,12 @@ public static class AddInfrastructureExtension
                         {
                                 op.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
                         })
-                        .AddScoped<IAuthenticationService, AuthenticationService>();
+                        .AddScoped<IAuthenticationService, AuthenticationService>()
+                        .AddHttpClient<IJwtProvider, JwtProvider>(client =>
+                        {
+                                client.BaseAddress = new Uri(configuration[AppConfig.AuthenticationTokenUriKey]);
+                        });
+                
                 ConfigFirebase(configuration);
 
                 return configuration;
