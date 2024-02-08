@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RKC.Pfm.Core.Application.Transients;
+namespace RKC.Pfm.Core.Infrastructure.Transients;
 
 public static class  AddAutoTransientsExtension
 {

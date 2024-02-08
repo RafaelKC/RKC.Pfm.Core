@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RKC.Pfm.Core.Application.Transients;
 using RKC.Pfm.Core.Infrastructure;
+using RKC.Pfm.Core.Infrastructure.Database;
+using RKC.Pfm.Core.Infrastructure.Extensions;
+using RKC.Pfm.Core.Infrastructure.Transients;
 
 namespace RKC.Pfm.Core.Api;
 
@@ -17,12 +19,8 @@ public class Startup
 
             services
                 .AddSingleton(Configuration)
-                .AddDbContext<RkcPfmCoreDbContext>(op =>
-                {
-                    op.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
-                })
+                .AddInfrastructure(Configuration)
                 .AddCors()
-                .AddAutoTransients()
                 .AddSwaggerGen()
                 .AddControllers();
 

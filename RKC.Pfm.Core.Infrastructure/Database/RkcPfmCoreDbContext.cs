@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace RKC.Pfm.Core.Infrastructure;
+namespace RKC.Pfm.Core.Infrastructure.Database;
 
 public class RkcPfmCoreDbContext: DbContext
 {
