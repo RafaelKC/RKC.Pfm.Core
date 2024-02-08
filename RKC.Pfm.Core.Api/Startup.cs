@@ -1,6 +1,6 @@
-﻿using RKC.Pfm.Core.Application.Transients;
+﻿using Microsoft.EntityFrameworkCore;
+using RKC.Pfm.Core.Application.Transients;
 using RKC.Pfm.Core.Infrastructure;
-using RKC.Pfm.Core.Infrastructure.Services;
 
 namespace RKC.Pfm.Core.Api;
 
@@ -17,15 +17,18 @@ public class Startup
 
             services
                 .AddSingleton(Configuration)
-                .AddDbContext<RkcPfmCoreDbContext>()
+                .AddDbContext<RkcPfmCoreDbContext>(op =>
+                {
+                    op.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                })
                 .AddCors()
                 .AddAutoTransients()
-                .AddScoped<MigrationService>()
+                .AddSwaggerGen()
                 .AddControllers();
 
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MigrationService migrationService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -48,7 +51,5 @@ public class Startup
             {
                 endpoints.MapControllers();
             });
-            
-            migrationService.ApplyMigrations();
         }
 }

@@ -9,30 +9,10 @@
     }
   },
   "profiles": {
-    "http": {
+    "RKC.Pfm.Core": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5208",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7240;http://localhost:5208",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://localhost:50001;http://localhost:50000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
