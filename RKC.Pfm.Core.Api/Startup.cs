@@ -1,25 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RKC.Pfm.Core.Infrastructure;
-using RKC.Pfm.Core.Infrastructure.Database;
-using RKC.Pfm.Core.Infrastructure.Extensions;
-using RKC.Pfm.Core.Infrastructure.Transients;
+﻿using RKC.Pfm.Core.Infrastructure.Extensions;
 
 namespace RKC.Pfm.Core.Api;
 
 public class Startup
 {
-    public IConfiguration Configuration { get; }   
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
     
      public void ConfigureServices(IServiceCollection services)
-        {
-
+     {
+         var configurations = services.AddInfrastructure();
+         
             services
-                .AddSingleton(Configuration)
-                .AddInfrastructure(Configuration)
                 .AddCors()
                 .AddSwaggerGen()
                 .AddControllers();
@@ -36,7 +26,6 @@ public class Startup
             }
 
             app.UseRouting();
-
             app.UseCors(e => e
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
