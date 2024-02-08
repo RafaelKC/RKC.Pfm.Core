@@ -1,4 +1,5 @@
-﻿using RKC.Pfm.Core.Infrastructure.Extensions;
+﻿using RKC.Pfm.Core.Application.Transients;
+using RKC.Pfm.Core.Infrastructure.Extensions;
 
 namespace RKC.Pfm.Core.Api;
 
@@ -10,8 +11,13 @@ public class Startup
          var configurations = services.AddInfrastructure();
          
             services
-                .AddCors()
                 .AddSwaggerGen()
+                .AddAutoTransients()
+                .AddCors()
+                .ConfigureHttpJsonOptions(op =>
+                {
+                    op.SerializerOptions.PropertyNameCaseInsensitive = true;
+                })
                 .AddControllers();
 
         }
@@ -24,6 +30,7 @@ public class Startup
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            
 
             app.UseRouting();
             app.UseCors(e => e

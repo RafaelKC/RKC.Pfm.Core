@@ -1,13 +1,12 @@
-﻿using FirebaseAdmin;
+﻿using System.Text.Json;
+using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+using RKC.Pfm.Core.Infrastructure.Authentication;
 using RKC.Pfm.Core.Infrastructure.Consts;
 using RKC.Pfm.Core.Infrastructure.Database;
-using RKC.Pfm.Core.Infrastructure.Transients;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace RKC.Pfm.Core.Infrastructure.Extensions;
 
@@ -16,13 +15,13 @@ public static class AddInfrastructureExtension
         public static IConfiguration AddInfrastructure(this IServiceCollection services)
         {
                 var configuration = services.AddConsul();
-                
+
                 services
                         .AddDbContext<RkcPfmCoreDbContext>(op =>
                         {
                                 op.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
                         })
-                        .AddAutoTransients();
+                        .AddScoped<IAuthenticationService, AuthenticationService>();
                 ConfigFirebase(configuration);
 
                 return configuration;

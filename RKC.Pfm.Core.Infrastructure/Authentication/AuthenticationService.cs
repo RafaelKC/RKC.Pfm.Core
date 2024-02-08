@@ -1,14 +1,13 @@
 ﻿using FirebaseAdmin.Auth;
-using RKC.Pfm.Core.Infrastructure.Transients;
 
-namespace RKC.Pfm.Core.Infrastructure;
+namespace RKC.Pfm.Core.Infrastructure.Authentication;
 
 public interface IAuthenticationService
 {
     Task<Guid> RegisterAsync(string email, string password, string userName);
 }
 
-public class AuthenticationService: IAuthenticationService, IAutoTransient
+public class AuthenticationService: IAuthenticationService
 {
     public async Task<Guid> RegisterAsync(string email, string password, string userName)
     {

@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RKC.Pfm.Core.Domain\RKC.Pfm.Core.Domain.csproj" />
+    <ProjectReference Include="..\RKC.Pfm.Core.Infrastructure\RKC.Pfm.Core.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
