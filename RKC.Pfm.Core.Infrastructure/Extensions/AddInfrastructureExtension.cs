@@ -4,7 +4,6 @@ using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RKC.Pfm.Core.Infrastructure.Authentication;
 using RKC.Pfm.Core.Infrastructure.Consts;
 using RKC.Pfm.Core.Infrastructure.Database;
 
@@ -21,11 +20,7 @@ public static class AddInfrastructureExtension
                         {
                                 op.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
                         })
-                        .AddScoped<IAuthenticationService, AuthenticationService>()
-                        .AddHttpClient<IJwtProvider, JwtProvider>(client =>
-                        {
-                                client.BaseAddress = new Uri(configuration[AppConfig.AuthenticationTokenUriKey]);
-                        });
+                        .AddAuthentication(configuration);
                 
                 ConfigFirebase(configuration);
 

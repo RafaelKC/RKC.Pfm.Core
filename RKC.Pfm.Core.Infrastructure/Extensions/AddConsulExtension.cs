@@ -29,7 +29,7 @@ public static class AddConsulExtension
                 }
             );
         var configuration = builder.Build();
-        services.AddSingleton(configuration);
+        services.AddSingleton<IConfiguration>(configuration);
         return configuration;
     }
 }

@@ -7,6 +7,7 @@ public interface IAuthenticationService
 {
     Task<Guid> RegisterAsync(string email, string password, string userName);
     Task<LoginOutput> Login(LoginInput input);
+    Task Logout(Guid userId);
 }
 
 public class AuthenticationService: IAuthenticationService
@@ -41,5 +42,10 @@ public class AuthenticationService: IAuthenticationService
             Token = authToken.IdToken,
             RefreshToken = authToken.RefreshToken
         };
+    }
+
+    public async Task Logout(Guid userId)
+    {
+        await FirebaseAuth.DefaultInstance.RevokeRefreshTokensAsync(userId.ToString());
     }
 }
