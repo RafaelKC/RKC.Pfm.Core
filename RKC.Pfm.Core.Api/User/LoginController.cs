@@ -24,11 +24,11 @@ public class LoginController: ControllerBase
         return UnprocessableEntity(result);
     }
     
-    [HttpPost("logout/{userId:guid}")]
+    [HttpPost("logout")]
     [Authorize]
-    public async Task<ActionResult> Logout([FromRoute] Guid userId)
+    public async Task<ActionResult> Logout()
     {
-        await _authenticationService.Logout(userId);
+        await _authenticationService.Logout();
         return Ok();
     }
     

@@ -24,8 +24,8 @@ public class LoggedOutUserMiddleware
                 ctx.Response.Clear();
                 ctx.Response.ContentType = "text/plain";
                 ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                await ctx.Response.WriteAsync("Invalid User Key");
-                return;
+                // await ctx.Response.WriteAsync("Invalid User Key");
+                // return;
             }
         }
         await _next.Invoke(ctx);

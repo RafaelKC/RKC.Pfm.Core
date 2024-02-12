@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using RKC.Pfm.Core.Infrastructure.Authentication;
 using RKC.Pfm.Core.Infrastructure.Consts;
 
@@ -11,19 +13,35 @@ public static class AddAuthenticationExtension
     public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         services
-            .AddScoped<IAuthenticationService, AuthenticationService>()
-            .AddHttpClient<IJwtProvider, JwtProvider>();
+            .AddScoped<IAuthenticationService, AuthenticationService>();
 
         services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
-                options.Authority = configuration[AppConfig.AuthenticationIssuer];
+                options.Authority = configuration[AppConfig.AuthenticationAuthority];
                 options.Audience = configuration[AppConfig.AuthenticationAudience];
-                options.TokenValidationParameters.ValidIssuer = configuration[AppConfig.AuthenticationIssuer];
-                options.TokenValidationParameters.ValidateIssuer = true;
-                options.TokenValidationParameters.ValidateAudience = true;
-                options.TokenValidationParameters.ValidateLifetime = true;
+                
+                options.IncludeErrorDetails = true;
+                // options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration[AppConfig.AuthenticationIssuer],
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(configuration[AppConfig.AuthenticationKey])
+                    ),
+                    
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidAudience = configuration[AppConfig.AuthenticationAudience],
+                };
             });
 
         return services;

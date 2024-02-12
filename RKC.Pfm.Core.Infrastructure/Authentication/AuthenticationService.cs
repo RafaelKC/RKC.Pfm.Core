@@ -1,51 +1,68 @@
-﻿using FirebaseAdmin.Auth;
+﻿using RKC.Pfm.Core.Domain.Usuarios;
 using RKC.Pfm.Core.Infrastructure.Authentication.Dots;
+using RKC.Pfm.Core.Infrastructure.Supabse;
+using Supabase.Gotrue;
+using Supabase.Gotrue.Exceptions;
 
 namespace RKC.Pfm.Core.Infrastructure.Authentication;
 
 public interface IAuthenticationService
 {
-    Task<Guid> RegisterAsync(string email, string password, string userName);
+    Task<Guid?> RegisterAsync(string email, string password, string userName);
     Task<LoginOutput> Login(LoginInput input);
-    Task Logout(Guid userId);
+    Task Logout();
 }
 
 public class AuthenticationService: IAuthenticationService
 {
-    private readonly IJwtProvider _jwtProvider;
+    private readonly ISupabseClient _supabseClient;
 
-    public AuthenticationService(IJwtProvider jwtProvider)
+    public AuthenticationService(ISupabseClient supabseClient)
     {
-        _jwtProvider = jwtProvider;
+        _supabseClient = supabseClient;
     }
 
-    public async Task<Guid> RegisterAsync(string email, string password, string userName)
+
+    public async Task<Guid?> RegisterAsync(string email, string password, string userName)
     {
-        var createUserArgs = new UserRecordArgs
+        var userData = new UserDto
         {
             Email = email,
-            Password = password,
-            DisplayName = userName,
-            Uid = Guid.NewGuid().ToString()
+            Name = userName
         };
 
-       var user = await FirebaseAuth.DefaultInstance.CreateUserAsync(createUserArgs);
-       return Guid.Parse(user.Uid);
+        try
+        {
+            var session = await _supabseClient.Auth.SignUp(email, password, new SignUpOptions
+            {
+                Data = new Dictionary<string, object>
+                {
+                    { "user", userData },
+                }
+            });
+            
+            return session?.User is not null ? Guid.Parse(session.User.Id) : null;
+        }
+        catch (GotrueException e)
+        {
+            return null;
+        }
     }
 
     public async Task<LoginOutput> Login(LoginInput input)
     {
-        var authToken = await _jwtProvider.GetForCredentialsAsync(input.email, input.password);
+        var session = await _supabseClient.Auth.SignIn(input.email, input.password);
+        
         return new LoginOutput
         {
-            Success = !string.IsNullOrWhiteSpace(authToken.IdToken),
-            Token = authToken.IdToken,
-            RefreshToken = authToken.RefreshToken
+            Success = session.User is not null,
+            Token = session.AccessToken,
+            RefreshToken = session.RefreshToken
         };
     }
 
-    public async Task Logout(Guid userId)
+    public async Task Logout()
     {
-        await FirebaseAuth.DefaultInstance.RevokeRefreshTokensAsync(userId.ToString());
+        await _supabseClient.Auth.SignOut();
     }
 }
