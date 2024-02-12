@@ -44,7 +44,7 @@ public class Startup
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // app.UseMiddleware<LoggedOutUserMiddleware>();
+            app.UseMiddleware<LoggedOutUserMiddleware>();
             
             app.UseEndpoints(endpoints =>
             {

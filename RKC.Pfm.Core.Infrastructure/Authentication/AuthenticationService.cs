@@ -1,4 +1,6 @@
-﻿using RKC.Pfm.Core.Domain.Usuarios;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using RKC.Pfm.Core.Domain.Usuarios;
+using RKC.Pfm.Core.Infrastructure.Authentication.Consts;
 using RKC.Pfm.Core.Infrastructure.Authentication.Dots;
 using RKC.Pfm.Core.Infrastructure.Supabse;
 using Supabase.Gotrue;
@@ -16,10 +18,12 @@ public interface IAuthenticationService
 public class AuthenticationService: IAuthenticationService
 {
     private readonly ISupabseClient _supabseClient;
+    private readonly IDistributedCache _distributedCache;
 
-    public AuthenticationService(ISupabseClient supabseClient)
+    public AuthenticationService(ISupabseClient supabseClient, IDistributedCache distributedCache)
     {
         _supabseClient = supabseClient;
+        _distributedCache = distributedCache;
     }
 
 
@@ -63,6 +67,18 @@ public class AuthenticationService: IAuthenticationService
 
     public async Task Logout()
     {
+        var token = _supabseClient.Auth.CurrentSession?.AccessToken;
+        var refresh = _supabseClient.Auth.CurrentSession?.RefreshToken;
+        
+        
         await _supabseClient.Auth.SignOut();
+        await _distributedCache.SetStringAsync(AuthenticationConfig.GetTokenCacheKey(token), token, new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(3600)
+        });
+        await _distributedCache.SetStringAsync(AuthenticationConfig.GetRefreshTokenCacheKey(refresh), refresh, new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(3600)
+        });
     }
 }

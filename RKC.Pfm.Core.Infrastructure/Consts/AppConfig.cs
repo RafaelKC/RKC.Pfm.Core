@@ -13,5 +13,8 @@ public static class AppConfig
     public const string AuthenticationKey = "Authentication:Key";
     public const string AuthenticationAuthority = "Authentication:Authority";
     
+    public const string CacheRedisUrl = "Cache:RedisUrl";
+    public const string CacheRedisPassword = "Cache:RedisPassword";
+    
     public const string SchemaNameKey = "SchemaName";
 }

@@ -19,6 +19,7 @@ public static class AddInfrastructureExtension
                                 op.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
                         })
                         .AddSupabase(configuration)
+                        .AddCache(configuration)
                         .AddAuthentication(configuration);
 
                 return configuration;
