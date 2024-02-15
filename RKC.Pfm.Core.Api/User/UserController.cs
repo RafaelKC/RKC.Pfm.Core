@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RKC.Pfm.Core.Application.Users;
 using RKC.Pfm.Core.Application.Users.Dtos;
-using RKC.Pfm.Core.Infrastructure.Authentication.Dots;
 
 namespace RKC.Pfm.Core.Api.User;
 
