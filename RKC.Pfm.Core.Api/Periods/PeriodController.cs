@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RKC.Pfm.Core.Application.Communs;
 using RKC.Pfm.Core.Application.Periods;
 using RKC.Pfm.Core.Application.Periods.Dtos;
@@ -7,6 +8,7 @@ using RKC.Pfm.Core.Domain.Periods;
 namespace RKC.Pfm.Core.Api.Periods;
 
 [ApiController]
+[Authorize]
 [Route("periods")]
 public class PeriodController: ControllerBase
 {
