@@ -20,7 +20,7 @@ public class PeriodController: ControllerBase
     }
 
     [HttpGet]
-    public async Task<PagedResult<PeriodDto>> GetList(PeriodGetListInput input)
+    public async Task<PagedResult<PeriodDto>> GetList([FromQuery] PeriodGetListInput input)
     {
         return await _periodService.GetList(input);
     }
