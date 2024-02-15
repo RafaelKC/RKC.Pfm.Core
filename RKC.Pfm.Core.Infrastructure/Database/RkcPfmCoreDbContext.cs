@@ -35,8 +35,6 @@ public class RkcPfmCoreDbContext: DbContext
 
         modelBuilder.Entity<Period>(period =>
         {
-            period.ToTable(nameof(Period).ToLower());
-            
             period.HasIndex(e => e.Start).IsUnique();
             period.HasIndex(e => e.End).IsUnique();
 
