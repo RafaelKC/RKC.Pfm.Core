@@ -57,10 +57,18 @@ public class RkcPfmCoreDbContext: DbContext
         }
     }
 
-    public override int SaveChanges()
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
         _resolveSavingEntities?.Resolve(ChangeTracker.Entries());
-        return base.SaveChanges();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+    
+    public override Task<int> SaveChangesAsync(
+        bool acceptAllChangesOnSuccess,
+        CancellationToken cancellationToken = default)
+    {
+        _resolveSavingEntities?.Resolve(ChangeTracker.Entries());
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
     private string GetSchemaName()

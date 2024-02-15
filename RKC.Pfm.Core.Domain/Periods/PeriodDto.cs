@@ -19,4 +19,8 @@ public class PeriodDto: EntityDto
         IsSchema = dto.IsSchema;
         IdSchemaPeriod = dto.IdSchemaPeriod;
     }
+    
+    public PeriodDto()
+    {
+    }
 }
