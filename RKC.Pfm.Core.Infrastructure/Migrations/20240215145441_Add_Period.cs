@@ -11,21 +11,14 @@ namespace RKC.Pfm.Core.Infrastructure.Migrations
     {
         /// <inheritdoc />
 
-        private readonly ISchemaNameProvider _schemaNameProvider;
-
-        public Add_Period(ISchemaNameProvider schemaNameProvider)
-        {
-            _schemaNameProvider = schemaNameProvider;
-        }
-
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: _schemaNameProvider.GetSchemaName());
+                name: "public");
 
             migrationBuilder.CreateTable(
                 name: "Periods",
-                schema: _schemaNameProvider.GetSchemaName(),
+                schema: "public",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -42,27 +35,27 @@ namespace RKC.Pfm.Core.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Periods_Periods_IdSchemaPeriod",
                         column: x => x.IdSchemaPeriod,
-                        principalSchema: _schemaNameProvider.GetSchemaName(),
+                        principalSchema: "public",
                         principalTable: "Periods",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Periods_End",
-                schema: _schemaNameProvider.GetSchemaName(),
+                schema: "public",
                 table: "Periods",
                 column: "End",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Periods_IdSchemaPeriod",
-                schema: _schemaNameProvider.GetSchemaName(),
+                schema: "public",
                 table: "Periods",
                 column: "IdSchemaPeriod");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Periods_Start",
-                schema: _schemaNameProvider.GetSchemaName(),
+                schema: "public",
                 table: "Periods",
                 column: "Start",
                 unique: true);
@@ -73,7 +66,7 @@ namespace RKC.Pfm.Core.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Periods",
-                schema: _schemaNameProvider.GetSchemaName());
+                schema: "public");
         }
     }
 }
