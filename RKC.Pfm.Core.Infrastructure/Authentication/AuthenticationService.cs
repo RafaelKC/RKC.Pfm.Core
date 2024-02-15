@@ -55,14 +55,24 @@ public class AuthenticationService: IAuthenticationService
 
     public async Task<LoginOutput> Login(LoginInput input)
     {
-        var session = await _supabseClient.Auth.SignIn(input.email, input.password);
-        
-        return new LoginOutput
+        try
         {
-            Success = session.User is not null,
-            Token = session.AccessToken,
-            RefreshToken = session.RefreshToken
-        };
+            var session = await _supabseClient.Auth.SignIn(input.email, input.password);
+            
+            return new LoginOutput
+            {
+                Success = session.User is not null,
+                Token = session.AccessToken,
+                RefreshToken = session.RefreshToken
+            };
+        }
+        catch (GotrueException e)
+        {
+            return new LoginOutput
+            {
+                Success = false
+            };
+        }
     }
 
     public async Task Logout()
