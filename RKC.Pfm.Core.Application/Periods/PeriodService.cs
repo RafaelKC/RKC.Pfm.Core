@@ -29,7 +29,7 @@ public class PeriodService: IPeriodService, IAutoTransient
     public async Task<PagedResult<PeriodDto>> GetList(PeriodGetListInput input)
     {
         var query = _context.Periods
-            .Where(p => p.Name.ToLower().Contains(input.Filter.ToLower()))
+            .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), p => p.Name.ToLower().Contains(input.Filter.ToLower()))
             .Where(p => p.IsSchema == input.Schemas)
             .OrderBy(p => p.Start);
 
