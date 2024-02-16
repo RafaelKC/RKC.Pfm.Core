@@ -1,4 +1,5 @@
 ﻿using RKC.Pfm.Core.Domain.Communs;
+using RKC.Pfm.Core.Domain.Periods.Enums;
 
 namespace RKC.Pfm.Core.Domain.Periods;
 
@@ -9,6 +10,7 @@ public class Period: Entity, IHasUserId
     public DateTime End { get; set; }
     public Guid UserId { get; set; }
     public bool IsSchema { get; set; }
+    public PeriodState State { get; set; }
     
     public Guid? IdSchemaPeriod { get; set; }
     public Period? SchemaPeriod { get; set; }
@@ -26,5 +28,6 @@ public class Period: Entity, IHasUserId
         End = dto.End;
         IsSchema = dto.IsSchema;
         IdSchemaPeriod = dto.IdSchemaPeriod;
+        State = dto.State;
     }
 }

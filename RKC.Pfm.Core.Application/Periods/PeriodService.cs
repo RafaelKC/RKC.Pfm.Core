@@ -4,6 +4,7 @@ using RKC.Pfm.Core.Application.Entensions;
 using RKC.Pfm.Core.Application.Periods.Dtos;
 using RKC.Pfm.Core.Application.Transients;
 using RKC.Pfm.Core.Domain.Periods;
+using RKC.Pfm.Core.Domain.Periods.Enums;
 using RKC.Pfm.Core.Infrastructure.Database;
 
 namespace RKC.Pfm.Core.Application.Periods;
@@ -61,7 +62,18 @@ public class PeriodService: IPeriodService, IAutoTransient
             return false;
         }
 
+        var now = DateTime.Now;
+        
+        var finalized = now > input.End;
+        var planned = now < input.Start;
+
+        var state = PeriodState.Current;
+        if (finalized) state = PeriodState.Finalized;
+        if (planned) state = PeriodState.Planned;
+
         var period = new Period(input);
+        period.State = state;
+        
         await _context.Periods.AddAsync(period);
         await _context.SaveChangesAsync();
         

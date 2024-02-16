@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RKC.Pfm.Core.Infrastructure.Database;
@@ -11,9 +12,11 @@ using RKC.Pfm.Core.Infrastructure.Database;
 namespace RKC.Pfm.Core.Infrastructure.Migrations
 {
     [DbContext(typeof(RkcPfmCoreDbContext))]
-    partial class RkcPfmCoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240216152638_Add_Period_State")]
+    partial class Add_Period_State
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

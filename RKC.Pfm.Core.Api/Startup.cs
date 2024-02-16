@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Microsoft.Net.Http.Headers;
+using RKC.Pfm.Core.Application.Periods;
 using RKC.Pfm.Core.Application.Transients;
 using RKC.Pfm.Core.Infrastructure.Authentication;
 using RKC.Pfm.Core.Infrastructure.Extensions;
@@ -21,6 +22,7 @@ public class Startup
                 {
                     op.SerializerOptions.PropertyNameCaseInsensitive = true;
                 })
+                .AddHostedService<PeriodsBackgroundJob>()
                 .AddControllers();
 
         }
