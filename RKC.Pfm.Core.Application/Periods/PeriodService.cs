@@ -31,7 +31,7 @@ public class PeriodService: IPeriodService, IAutoTransient
         var query = _context.Periods
             .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), p => p.Name.ToLower().Contains(input.Filter.ToLower()))
             .WhereIf(input.EndOnOrBeforeFilter.HasValue, p => p.End >= input.EndOnOrBeforeFilter)
-            .Where(p => p.IsSchema == input.JustSchemas)
+            .Where(p => p.IsSchema == input.SchemasFilter)
             .OrderBy(p => p.Start);
 
         if (!input.OrderAscending)

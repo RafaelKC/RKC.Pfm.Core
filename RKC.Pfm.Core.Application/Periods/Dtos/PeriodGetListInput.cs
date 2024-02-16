@@ -6,5 +6,5 @@ public class PeriodGetListInput: PagedFilteredInput
 {
     public DateTime? EndOnOrBeforeFilter { get; set; }
     public bool OrderAscending { get; set; } = true;
-    public bool JustSchemas { get; set; } = false;
+    public bool SchemasFilter { get; set; } = false;
 }
