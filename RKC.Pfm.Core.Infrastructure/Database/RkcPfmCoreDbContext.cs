@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using RKC.Pfm.Core.Domain.Communs;
 using RKC.Pfm.Core.Domain.Periods;
 using RKC.Pfm.Core.Infrastructure.Database.Services;
+using RKC.Pfm.Core.Infrastructure.Supabse;
 
 namespace RKC.Pfm.Core.Infrastructure.Database;
 
@@ -11,6 +13,7 @@ public class RkcPfmCoreDbContext: DbContext
     private IResolveSavingEntities? _resolveSavingEntities;
     private IResolveFilterEntities? _resolveFilterEntities;
     
+    
     public RkcPfmCoreDbContext()
     {
     }
@@ -18,7 +21,8 @@ public class RkcPfmCoreDbContext: DbContext
     public RkcPfmCoreDbContext(
         DbContextOptions<RkcPfmCoreDbContext> options,
         ISchemaNameProvider schemaNameProvider,
-        IResolveSavingEntities? resolveSavingEntities, IResolveFilterEntities? resolveFilterEntities): base(options)
+        IResolveSavingEntities? resolveSavingEntities,
+        IResolveFilterEntities? resolveFilterEntities): base(options)
     {
         _schemaNameProvider = schemaNameProvider;
         _resolveSavingEntities = resolveSavingEntities;

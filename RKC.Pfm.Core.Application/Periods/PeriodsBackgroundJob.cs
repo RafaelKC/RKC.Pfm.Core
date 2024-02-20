@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RKC.Pfm.Core.Domain.Periods.Enums;
 using RKC.Pfm.Core.Infrastructure.Database;
@@ -7,11 +8,11 @@ namespace RKC.Pfm.Core.Application.Periods;
 
 public class PeriodsBackgroundJob: BackgroundService
 {
-    private readonly RkcPfmCoreDbContext _context;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public PeriodsBackgroundJob(RkcPfmCoreDbContext context)
+    public PeriodsBackgroundJob(IServiceScopeFactory serviceScopeFactory)
     {
-        _context = context;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -35,14 +36,17 @@ public class PeriodsBackgroundJob: BackgroundService
 
     private async Task Execute()
     {
+        using var scope = _serviceScopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<RkcPfmCoreDbContext>();
+        
         var now = DateTime.Now;
         
-        var finalizedPeriods = await _context.Periods
+        var finalizedPeriods = await context.Periods
             .Where(p => p.End <= now)
             .Where(p => p.State != PeriodState.Finalized)
             .ToListAsync();
         
-        var currentPeriods = await _context.Periods
+        var currentPeriods = await context.Periods
             .Where(p => p.Start <= now && p.End < now)
             .Where(p => p.State != PeriodState.Current)
             .ToListAsync();
@@ -57,8 +61,8 @@ public class PeriodsBackgroundJob: BackgroundService
             currentPeriod.State = PeriodState.Current;
         }
         
-        _context.Periods.UpdateRange(finalizedPeriods);
-        _context.Periods.UpdateRange(currentPeriods);
-        await _context.SaveChangesAsync();
+        context.Periods.UpdateRange(finalizedPeriods);
+        context.Periods.UpdateRange(currentPeriods);
+        await context.SaveChangesAsync();
     }
 }

@@ -23,9 +23,15 @@ public class ResolveFilterEntities : IResolveFilterEntities
 
     public void Resolve(ModelBuilder builder)
     {
-        var currentUser = _supabseClient.Auth.CurrentUser?.Id;
-        
-        builder.ApplyGlobalFilters<IHasUserId>(e => currentUser != null && e.UserId == Guid.Parse(currentUser));
+        builder.ApplyGlobalFilters<IHasUserId>(e => 
+            _supabseClient != null
+            && _supabseClient.Auth != null
+            && _supabseClient.Auth.CurrentUser != null
+            && !string.IsNullOrWhiteSpace(_supabseClient.Auth.CurrentUser.Id)
+            && e != null
+            && e.UserId != null 
+            && e.UserId != Guid.Empty
+            && e.UserId == Guid.Parse(_supabseClient.Auth.CurrentUser.Id));
     }
 }
 

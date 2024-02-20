@@ -6,6 +6,7 @@ using RKC.Pfm.Core.Application.Transients;
 using RKC.Pfm.Core.Domain.Periods;
 using RKC.Pfm.Core.Domain.Periods.Enums;
 using RKC.Pfm.Core.Infrastructure.Database;
+using RKC.Pfm.Core.Infrastructure.Supabse;
 
 namespace RKC.Pfm.Core.Application.Periods;
 
@@ -21,10 +22,12 @@ public interface IPeriodService
 public class PeriodService: IPeriodService, IAutoTransient
 {
     private readonly RkcPfmCoreDbContext _context;
+    private readonly ISupabseClient _supabseClient;
 
-    public PeriodService(RkcPfmCoreDbContext context)
+    public PeriodService(RkcPfmCoreDbContext context, ISupabseClient supabseClient)
     {
         _context = context;
+        _supabseClient = supabseClient;
     }
 
     public async Task<PagedResult<PeriodDto>> GetList(PeriodGetListInput input)
