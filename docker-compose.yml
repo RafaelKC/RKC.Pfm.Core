@@ -1,0 +1,45 @@
+﻿version: '3.4'
+
+networks:
+  dev:
+    driver: bridge
+    
+services: 
+  rkc-pfm-core:
+    image: rkc.pfm.core
+    build: .
+    depends_on: 
+      - "consul"
+      - "redis"
+    container_name: rkc.pfm.core
+    ports:
+      - "80:80"
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - CONSUL_HOST=http://consul:8500
+    networks: 
+      - dev
+       
+  consul: 
+    image: consul:1.15.4
+    container_name: consul
+    ports:
+      - "8500:8500"
+    volumes:
+      - consul:/consul/data
+    networks:
+      - dev
+    restart: always
+
+  redis:
+    image: redis:latest 
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - dev
+    restart: always
+
+volumes:
+  portainer:
+  consul:

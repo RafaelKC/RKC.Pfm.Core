@@ -6,6 +6,7 @@ using RKC.Pfm.Core.Infrastructure.Authentication.Dots;
 namespace RKC.Pfm.Core.Api.User;
 
 [ApiController]
+[Route("auth")]
 public class LoginController: ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
@@ -32,4 +33,11 @@ public class LoginController: ControllerBase
         return Ok();
     }
     
+    [HttpGet("is-login-valid")]
+    [Authorize]
+    public async Task<ActionResult> IsLoginValid()
+    {
+        await Task.CompletedTask;
+        return Ok();
+    }
 }
